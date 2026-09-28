@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Recommendations | Skill Decay Tracker</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+
+<body class="recommendations-page">
+
+
+    <nav class="navbar">
+
+        <a href="{{ url_for('dashboard') }}"
+           class="brand">
+
+            <span class="brand-icon">
+                🧠
+            </span>
+
+            <span class="brand-text">
+                Skill Decay Tracker
+            </span>
+
+        </a>
+
+
+        <div class="nav-links">
+
+            <a href="{{ url_for('dashboard') }}"
+               class="nav-link">
+                🏠 Dashboard
+            </a>
+
+            <a href="{{ url_for('skills') }}"
+               class="nav-link">
+                💡 My Skills
+            </a>
+
+            <a href="{{ url_for('history') }}"
+               class="nav-link">
+                📜 History
+            </a>
+
+            <a href="{{ url_for('recommendations') }}"
+               class="nav-link active">
+                ✨ Recommendations
+            </a>
+
+            <a href="{{ url_for('add_skill') }}"
+               class="nav-link">
+                ➕ Add Skill
+            </a>
+
+            <a href="{{ url_for('logout') }}"
+               class="nav-link logout-link">
+                Logout
+            </a>
+
+        </div>
+
+    </nav>
+
+
+    <main class="recommendations-container">
+
+
+        <section class="recommendations-header">
+
+            <div>
+
+                <p class="dashboard-label">
+                    PERSONALIZED GUIDANCE
+                </p>
+
+                <h1>
+                    Recommendations
+                </h1>
+
+                <p>
+                    Get practical suggestions based on
+                    your actual skills and practice activity.
+                </p>
+
+            </div>
+
+
+            <a href="{{ url_for('skills') }}"
+               class="btn-primary">
+
+                📝 Practice a Skill
+
+            </a>
+
+        </section>
+
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+
+            {% if messages %}
+
+                <div class="flash-container">
+
+                    {% for category, message in messages %}
+
+                        <div class="flash-message {{ category }}">
+                            {{ message }}
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+            {% endif %}
+
+        {% endwith %}
+
+
+        <section class="recommendation-intro">
+
+            <div class="recommendation-intro-icon">
+                ✨
+            </div>
+
+            <div>
+
+                <h2>
+                    Keep Your Skills Active
+                </h2>
+
+                <p>
+                    These recommendations are generated
+                    from your practice frequency,
+                    recent activity, and recorded performance.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <section class="recommendations-section">
+
+
+            <div class="section-heading">
+
+                <div>
+
+                    <p class="dashboard-label">
+                        YOUR SKILLS
+                    </p>
+
+                    <h2>
+                        What You Should Do Next
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            {% if recommendations %}
+
+
+                <div class="recommendations-grid">
+
+
+                    {% for item in recommendations %}
+
+
+                        <article class="recommendation-card
+                            {{ item.recommendation_type }}">
+
+
+                            <div class="recommendation-card-header">
+
+                                <div class="recommendation-skill-icon">
+                                    💡
+                                </div>
+
+                                <div>
+
+                                    <h3>
+                                        {{ item.skill_name }}
+                                    </h3>
+
+                                    <p>
+                                        📂 {{ item.category }}
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="recommendation-status
+                                {{ item.recommendation_type }}"
+                            >
+
+                                {% if item.recommendation_type == "start" %}
+
+                                    🚀 Start
+
+                                {% elif item.recommendation_type == "on-track" %}
+
+                                    ✓ On Track
+
+                                {% elif item.recommendation_type == "soon" %}
+
+                                    ⏰ Practice Soon
+
+                                {% else %}
+
+                                    ⚠ Needs Attention
+
+                                {% endif %}
+
+                            </div>
+
+
+                            <div class="recommendation-content">
+
+                                <h4>
+                                    {{ item.recommendation_title }}
+                                </h4>
+
+                                <p>
+                                    {{ item.recommendation_text }}
+                                </p>
+
+                            </div>
+
+
+                            <div class="recommendation-details">
+
+
+                                <div class="recommendation-detail">
+
+                                    <span>
+                                        Level
+                                    </span>
+
+                                    <strong>
+                                        {{ item.initial_level }}
+                                    </strong>
+
+                                </div>
+
+
+                                <div class="recommendation-detail">
+
+                                    <span>
+                                        Target
+                                    </span>
+
+                                    <strong>
+                                        Every {{ item.target_frequency }} days
+                                    </strong>
+
+                                </div>
+
+
+                                <div class="recommendation-detail">
+
+                                    <span>
+                                        Sessions
+                                    </span>
+
+                                    <strong>
+                                        {{ item.total_sessions }}
+                                    </strong>
+
+                                </div>
+
+
+                                <div class="recommendation-detail">
+
+                                    <span>
+                                        Performance
+                                    </span>
+
+                                    <strong>
+                                        {{ item.average_performance }}%
+                                    </strong>
+
+                                </div>
+
+
+                            </div>
+
+
+                            <div class="performance-tip">
+
+                                <span class="performance-tip-icon">
+                                    💡
+                                </span>
+
+                                <div>
+
+                                    <strong>
+                                        Practice Tip
+                                    </strong>
+
+                                    <p>
+                                        {{ item.performance_tip }}
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="recommendation-actions">
+
+                                <a
+                                    href="{{ url_for('practice', skill_id=item.id) }}"
+                                    class="btn-primary"
+                                >
+
+                                    📝 Practice Now
+
+                                </a>
+
+                            </div>
+
+
+                        </article>
+
+
+                    {% endfor %}
+
+
+                </div>
+
+
+            {% else %}
+
+
+                <div class="empty-state">
+
+                    <div class="empty-icon">
+                        ✨
+                    </div>
+
+                    <h2>
+                        No Skills Available
+                    </h2>
+
+                    <p>
+                        Add a skill first to receive
+                        personalized recommendations.
+                    </p>
+
+                    <a href="{{ url_for('add_skill') }}"
+                       class="btn-primary">
+
+                        ➕ Add Your First Skill
+
+                    </a>
+
+                </div>
+
+
+            {% endif %}
+
+
+        </section>
+
+
+    </main>
+
+
+    <footer class="dashboard-footer">
+
+        <p>
+            © 2026 Skill Decay Tracker.
+            Track. Practice. Improve. 🚀
+        </p>
+
+    </footer>
+
+
+</body>
+
+</html>

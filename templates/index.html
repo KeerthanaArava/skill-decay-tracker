@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Skill Decay Tracker</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+
+<body class="home-page">
+
+
+    <nav class="navbar home-navbar">
+
+        <a href="{{ url_for('home') }}"
+           class="brand">
+
+            <span class="brand-icon">
+                🧠
+            </span>
+
+            <span class="brand-text">
+                Skill Decay Tracker
+            </span>
+
+        </a>
+
+
+        <div class="nav-links">
+
+            <a href="{{ url_for('login') }}"
+               class="nav-link">
+                Login
+            </a>
+
+            <a href="{{ url_for('register') }}"
+               class="nav-cta">
+                Get Started
+            </a>
+
+        </div>
+
+    </nav>
+
+
+    <main class="home-main">
+
+
+        <section class="hero-section">
+
+            <div class="hero-content">
+
+                <p class="hero-label">
+                    LEARN • PRACTICE • IMPROVE
+                </p>
+
+                <h1>
+                    Keep Your Skills
+                    <span>Fresh</span>
+                </h1>
+
+                <p class="hero-description">
+                    Track your technical skills, record your
+                    practice sessions, and receive personalized
+                    recommendations to stay consistent.
+                </p>
+
+
+                <div class="hero-actions">
+
+                    <a href="{{ url_for('register') }}"
+                       class="btn-primary">
+                        Get Started →
+                    </a>
+
+                    <a href="{{ url_for('login') }}"
+                       class="btn-secondary">
+                        Login
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <div class="hero-visual">
+
+                <div class="hero-card">
+
+                    <div class="hero-card-icon">
+                        🧠
+                    </div>
+
+                    <h3>
+                        Skill Tracking
+                    </h3>
+
+                    <p>
+                        Practice consistently and
+                        understand your learning activity.
+                    </p>
+
+                </div>
+
+                <div class="hero-floating-card">
+                    ✨ Stay Consistent
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <section class="feature-section">
+
+            <div class="section-heading centered">
+
+                <p class="dashboard-label">
+                    FEATURES
+                </p>
+
+                <h2>
+                    Everything You Need
+                </h2>
+
+            </div>
+
+
+            <div class="feature-grid">
+
+                <div class="feature-card">
+
+                    <div class="feature-icon">
+                        📊
+                    </div>
+
+                    <h3>
+                        Track Skills
+                    </h3>
+
+                    <p>
+                        Maintain a personal list of
+                        the skills you are learning.
+                    </p>
+
+                </div>
+
+
+                <div class="feature-card">
+
+                    <div class="feature-icon">
+                        📝
+                    </div>
+
+                    <h3>
+                        Record Practice
+                    </h3>
+
+                    <p>
+                        Record your practice time,
+                        difficulty, and performance.
+                    </p>
+
+                </div>
+
+
+                <div class="feature-card">
+
+                    <div class="feature-icon">
+                        ✨
+                    </div>
+
+                    <h3>
+                        Get Recommendations
+                    </h3>
+
+                    <p>
+                        Receive guidance based on
+                        your actual practice activity.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <footer class="dashboard-footer">
+
+        <p>
+            © 2026 Skill Decay Tracker.
+            Track. Practice. Improve. 🚀
+        </p>
+
+    </footer>
+
+
+</body>
+
+</html>

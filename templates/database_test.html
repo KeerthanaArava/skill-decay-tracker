@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Database Test | Skill Decay Tracker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body class="dashboard-page">
+
+    <nav class="navbar">
+        <a href="{{ url_for('dashboard') if 'user_id' in session else url_for('home') }}" class="brand">
+            <span class="brand-icon">🧠</span>
+            <span class="brand-text">Skill Decay Tracker</span>
+        </a>
+
+        <div class="nav-links">
+            {% if 'user_id' in session %}
+                <a href="{{ url_for('dashboard') }}" class="nav-link">Dashboard</a>
+                <a href="{{ url_for('logout') }}" class="nav-link logout-link">Logout</a>
+            {% else %}
+                <a href="{{ url_for('login') }}" class="nav-link">Login</a>
+                <a href="{{ url_for('register') }}" class="nav-cta">Register</a>
+            {% endif %}
+        </div>
+    </nav>
+
+    <main class="database-container">
+
+        <div class="form-card">
+
+            <p class="dashboard-label">
+                DATABASE DIAGNOSTICS
+            </p>
+
+            <h1>
+                Database Connection Test
+            </h1>
+
+            {% if connected %}
+                <div style="background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 12px; padding: 16px; margin: 16px 0; color: #15803d; display: flex; align-items: center; gap: 12px;">
+                    <span style="font-size: 24px;">✅</span>
+                    <div>
+                        <strong style="display: block; font-size: 16px;">MySQL Connected Successfully</strong>
+                        <span style="font-size: 13px; color: #166534;">Connected to database <strong>{{ database }}</strong> on <code>{{ host }}:{{ port }}</code> as user <code>{{ user }}</code></span>
+                    </div>
+                </div>
+
+                <h2>
+                    Available Tables & Record Counts
+                </h2>
+
+                {% if tables %}
+                    <div class="database-table-list">
+                        {% for table in tables %}
+                            <div class="database-table-item" style="justify-content: space-between; align-items: center;">
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <span>🗄</span>
+                                    <strong>{{ table.name if table.name is defined else table }}</strong>
+                                </div>
+                                {% if table.count is defined %}
+                                    <span style="background: #e0e7ff; color: #3730a3; font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 999px;">
+                                        {{ table.count }} record{{ 's' if table.count != 1 else '' }}
+                                    </span>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p style="color: var(--text-light); margin-bottom: 20px;">
+                        Connected to database, but no tables were found. Tables will be automatically created on application startup.
+                    </p>
+                {% endif %}
+
+            {% else %}
+                <div style="background: #fef2f2; border: 1.5px solid #fca5a5; border-radius: 12px; padding: 16px; margin: 16px 0; color: #b91c1c; display: flex; align-items: flex-start; gap: 12px;">
+                    <span style="font-size: 24px;">❌</span>
+                    <div>
+                        <strong style="display: block; font-size: 16px;">Unable to Connect to Database</strong>
+                        <p style="margin: 6px 0 0 0; font-size: 14px; color: #991b1b;">
+                            {{ error if error else 'MySQL server could not be reached.' }}
+                        </p>
+                    </div>
+                </div>
+
+                <div style="background: #f8fafc; border: 1px solid var(--border); border-radius: 12px; padding: 18px; margin-bottom: 24px; font-size: 14px; line-height: 1.6;">
+                    <h3 style="margin-top: 0; font-size: 15px; color: var(--text);">Troubleshooting Steps:</h3>
+                    <ul style="padding-left: 20px; margin-bottom: 0; color: var(--text-light);">
+                        <li>Ensure MySQL server or MySQL service is started in Windows Services.</li>
+                        <li>Verify credentials in <code>.env</code> file (e.g. <code>MYSQLUSER</code>, <code>MYSQLPASSWORD</code>, <code>MYSQLPORT</code>).</li>
+                        <li>Default configured port is <code>3306</code> and user is <code>root</code>.</li>
+                    </ul>
+                </div>
+            {% endif %}
+
+            <div style="display: flex; gap: 12px; margin-top: 20px;">
+                <a href="{{ url_for('dashboard') if 'user_id' in session else url_for('login') }}" class="btn-primary">
+                    ← Back to {{ 'Dashboard' if 'user_id' in session else 'Login' }}
+                </a>
+            </div>
+
+        </div>
+
+    </main>
+
+</body>
+
+</html>

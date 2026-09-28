@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Practice | Skill Decay Tracker</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+
+<body class="practice-page">
+
+
+    <nav class="navbar">
+
+        <a href="{{ url_for('dashboard') }}"
+           class="brand">
+
+            <span class="brand-icon">
+                🧠
+            </span>
+
+            <span class="brand-text">
+                Skill Decay Tracker
+            </span>
+
+        </a>
+
+
+        <div class="nav-links">
+
+            <a href="{{ url_for('dashboard') }}"
+               class="nav-link">
+                🏠 Dashboard
+            </a>
+
+            <a href="{{ url_for('skills') }}"
+               class="nav-link active">
+                💡 My Skills
+            </a>
+
+            <a href="{{ url_for('history') }}"
+               class="nav-link">
+                📜 History
+            </a>
+
+            <a href="{{ url_for('recommendations') }}"
+               class="nav-link">
+                ✨ Recommendations
+            </a>
+
+            <a href="{{ url_for('add_skill') }}"
+               class="nav-link">
+                ➕ Add Skill
+            </a>
+
+            <a href="{{ url_for('logout') }}"
+               class="nav-link logout-link">
+                Logout
+            </a>
+
+        </div>
+
+    </nav>
+
+
+    <main class="practice-container">
+
+
+        <section class="page-header">
+
+            <div>
+
+                <p class="dashboard-label">
+                    PRACTICE SESSION
+                </p>
+
+                <h1>
+                    Practice {{ skill.skill_name }}
+                </h1>
+
+                <p>
+                    Record today's practice session.
+                </p>
+
+            </div>
+
+
+            <a href="{{ url_for('skills') }}"
+               class="btn-secondary">
+
+                ← My Skills
+
+            </a>
+
+        </section>
+
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+
+            {% if messages %}
+
+                <div class="flash-container">
+
+                    {% for category, message in messages %}
+
+                        <div class="flash-message {{ category }}">
+                            {{ message }}
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+            {% endif %}
+
+        {% endwith %}
+
+
+        <section class="practice-layout">
+
+
+            <div class="practice-summary-card">
+
+                <div class="practice-large-icon">
+                    💡
+                </div>
+
+                <h2>
+                    {{ skill.skill_name }}
+                </h2>
+
+                <p>
+                    📂 {{ skill.category }}
+                </p>
+
+
+                <div class="practice-summary-details">
+
+                    <div>
+
+                        <span>
+                            Current Level
+                        </span>
+
+                        <strong>
+                            {{ skill.initial_level }}
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            Target Frequency
+                        </span>
+
+                        <strong>
+                            Every {{ skill.target_frequency }} days
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="form-card">
+
+
+                <form method="POST"
+                      class="skill-form">
+
+
+                    <div class="form-group">
+
+                        <label for="practice_date">
+                            Practice Date
+                        </label>
+
+                        <input
+                            type="date"
+                            id="practice_date"
+                            name="practice_date"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="duration">
+                            Practice Duration
+                        </label>
+
+                        <div class="input-with-suffix">
+
+                            <input
+                                type="number"
+                                id="duration"
+                                name="duration"
+                                min="1"
+                                placeholder="Example: 60"
+                                required
+                            >
+
+                            <span>
+                                minutes
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="difficulty">
+                            Difficulty
+                        </label>
+
+                        <select
+                            id="difficulty"
+                            name="difficulty"
+                            required
+                        >
+
+                            <option value="">
+                                Select difficulty
+                            </option>
+
+                            <option value="Easy">
+                                Easy
+                            </option>
+
+                            <option value="Medium">
+                                Medium
+                            </option>
+
+                            <option value="Hard">
+                                Hard
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="performance">
+                            Performance
+                        </label>
+
+                        <div class="input-with-suffix">
+
+                            <input
+                                type="number"
+                                id="performance"
+                                name="performance"
+                                min="0"
+                                max="100"
+                                placeholder="Example: 80"
+                                required
+                            >
+
+                            <span>
+                                %
+                            </span>
+
+                        </div>
+
+                        <p class="field-help">
+                            Enter a value between 0 and 100.
+                        </p>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="notes">
+                            Notes
+                            <span class="optional">
+                                (Optional)
+                            </span>
+                        </label>
+
+                        <textarea
+                            id="notes"
+                            name="notes"
+                            rows="5"
+                            placeholder="What did you practice today?"
+                        ></textarea>
+
+                    </div>
+
+
+                    <div class="form-actions">
+
+                        <a href="{{ url_for('skills') }}"
+                           class="btn-secondary">
+
+                            Cancel
+
+                        </a>
+
+                        <button
+                            type="submit"
+                            class="btn-primary">
+
+                            ✓ Save Practice
+
+                        </button>
+
+                    </div>
+
+
+                </form>
+
+            </div>
+
+
+        </section>
+
+
+    </main>
+
+
+    <footer class="dashboard-footer">
+
+        <p>
+            © 2026 Skill Decay Tracker.
+            Track. Practice. Improve. 🚀
+        </p>
+
+    </footer>
+
+
+    <script>
+
+        const dateInput =
+            document.getElementById("practice_date");
+
+        if (dateInput && !dateInput.value) {
+
+            const today =
+                new Date().toISOString().split("T")[0];
+
+            dateInput.value = today;
+        }
+
+    </script>
+
+
+</body>
+
+</html>

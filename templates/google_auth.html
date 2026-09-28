@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign in with Google | Skill Decay Tracker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body class="auth-page">
+
+    <div class="auth-container google-chooser-container">
+
+        <div class="auth-card">
+
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
+                <div class="auth-logo" style="margin-bottom: 0;">
+                    🧠
+                </div>
+                <svg class="google-icon" viewBox="0 0 24 24" width="36" height="36">
+                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+                </svg>
+            </div>
+
+            <p class="auth-label">
+                SIGN IN WITH GOOGLE
+            </p>
+
+            <h1>
+                Welcome back!
+            </h1>
+
+            <p class="auth-description">
+                Sign in with your Google account to continue to Skill Decay Tracker.
+            </p>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="flash-container" style="margin-top: 16px;">
+                        {% for category, message in messages %}
+                            <div class="flash-message {{ category }}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+            <p style="font-size: 14px; font-weight: 600; color: #495057; margin-top: 18px; margin-bottom: 10px; text-align: left;">
+                Choose an account
+            </p>
+
+            <div class="google-account-list">
+
+                <!-- Account 1 -->
+                <a href="{{ url_for('auth_google_demo', email='keeru2005@gmail.com', name='Keerthana') }}" class="google-account-item">
+                    <div class="google-account-info">
+                        <div class="google-account-avatar" style="background: #4285F4;">
+                            K
+                        </div>
+                        <div class="google-account-details">
+                            <h4>Keerthana</h4>
+                            <p>keeru2005@gmail.com</p>
+                        </div>
+                    </div>
+                    <span style="font-size: 13px; font-weight: 700; color: var(--primary);">Continue →</span>
+                </a>
+
+                <!-- Account 2 -->
+                <a href="{{ url_for('auth_google_demo', email='demo.student@gmail.com', name='Demo Student') }}" class="google-account-item">
+                    <div class="google-account-info">
+                        <div class="google-account-avatar" style="background: #34A853;">
+                            D
+                        </div>
+                        <div class="google-account-details">
+                            <h4>Demo Student</h4>
+                            <p>demo.student@gmail.com</p>
+                        </div>
+                    </div>
+                    <span style="font-size: 13px; font-weight: 700; color: var(--primary);">Continue →</span>
+                </a>
+
+            </div>
+
+            <div class="auth-divider">
+                <span>OR CONTINUE WITH ANOTHER ACCOUNT</span>
+            </div>
+
+            <form method="POST" action="{{ url_for('auth_google_demo') }}" class="auth-form" style="margin-top: 10px;">
+
+                <div class="form-group" style="margin-bottom: 14px;">
+                    <label for="name">Your Name</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon">👤</span>
+                        <input type="text" id="name" name="name" placeholder="Enter your name" required>
+                    </div>
+                </div>
+
+                <div class="form-group" style="margin-bottom: 16px;">
+                    <label for="email">Google Email</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon">✉</span>
+                        <input type="email" id="email" name="email" placeholder="Enter your Gmail address" required>
+                    </div>
+                </div>
+
+                <button type="submit" class="auth-button" style="background: #4285F4;">
+                    <svg class="google-icon" viewBox="0 0 24 24" width="18" height="18" style="vertical-align: middle; margin-right: 8px;">
+                        <path fill="#ffffff" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15h2v-6h-2v6zm0-8h2V7h-2v2z"/>
+                    </svg>
+                    Continue with Google
+                </button>
+
+                <p style="font-size: 12px; color: #6c757d; margin-top: 10px; margin-bottom: 14px; text-align: center; line-height: 1.4;">
+                    Your account information is securely used to create your Skill Decay Tracker profile.
+                </p>
+
+            </form>
+
+            <div class="google-info-box">
+                💡 <strong>Google OAuth 2.0 Integration:</strong> Live Google Cloud OAuth is fully built-in. To connect real Google accounts directly, add <code>GOOGLE_CLIENT_ID</code> and <code>GOOGLE_CLIENT_SECRET</code> to your <code>.env</code> file.
+            </div>
+
+            <div class="auth-switch" style="margin-top: 18px;">
+                <span>New to Skill Decay Tracker?</span>
+                <a href="{{ url_for('register') }}">Create an account</a>
+            </div>
+
+            <a href="{{ url_for('home') }}" class="back-home">
+                ← Back to Home
+            </a>
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>

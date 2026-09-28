@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Add Skill | Skill Decay Tracker</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+
+<body class="add-skill-page">
+
+
+    <nav class="navbar">
+
+        <a href="{{ url_for('dashboard') }}"
+           class="brand">
+
+            <span class="brand-icon">
+                🧠
+            </span>
+
+            <span class="brand-text">
+                Skill Decay Tracker
+            </span>
+
+        </a>
+
+
+        <div class="nav-links">
+
+            <a href="{{ url_for('dashboard') }}"
+               class="nav-link">
+                🏠 Dashboard
+            </a>
+
+            <a href="{{ url_for('skills') }}"
+               class="nav-link">
+                💡 My Skills
+            </a>
+
+            <a href="{{ url_for('history') }}"
+               class="nav-link">
+                📜 History
+            </a>
+
+            <a href="{{ url_for('recommendations') }}"
+               class="nav-link">
+                ✨ Recommendations
+            </a>
+
+            <a href="{{ url_for('add_skill') }}"
+               class="nav-link active">
+                ➕ Add Skill
+            </a>
+
+            <a href="{{ url_for('logout') }}"
+               class="nav-link logout-link">
+                Logout
+            </a>
+
+        </div>
+
+    </nav>
+
+
+    <main class="form-page-container">
+
+
+        <section class="page-header">
+
+            <div>
+
+                <p class="dashboard-label">
+                    SKILL MANAGEMENT
+                </p>
+
+                <h1>
+                    Add New Skill
+                </h1>
+
+                <p>
+                    Add a skill you want to track and practice.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+
+            {% if messages %}
+
+                <div class="flash-container">
+
+                    {% for category, message in messages %}
+
+                        <div class="flash-message {{ category }}">
+                            {{ message }}
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+            {% endif %}
+
+        {% endwith %}
+
+
+        <section class="form-card">
+
+
+            <form method="POST"
+                  class="skill-form">
+
+
+                <div class="form-group">
+
+                    <label for="skill_name">
+                        Skill Name
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <span class="input-icon">
+                            &lt;/&gt;
+                        </span>
+
+                        <input
+                            type="text"
+                            id="skill_name"
+                            name="skill_name"
+                            placeholder="Example: Python"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="category">
+                        Category
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <span class="input-icon">
+                            📂
+                        </span>
+
+                        <select
+                            id="category"
+                            name="category"
+                            required
+                        >
+
+                            <option value="">
+                                Select a category
+                            </option>
+
+                            <option value="Programming">
+                                Programming
+                            </option>
+
+                            <option value="Database">
+                                Database
+                            </option>
+
+                            <option value="Data Analytics">
+                                Data Analytics
+                            </option>
+
+                            <option value="Web Development">
+                                Web Development
+                            </option>
+
+                            <option value="AI / ML">
+                                AI / ML
+                            </option>
+
+                            <option value="Other">
+                                Other
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Practice Frequency
+                    </label>
+
+                    <p class="field-help">
+                        How often do you want to practice this skill?
+                    </p>
+
+
+                    <div class="frequency-grid">
+
+
+                        <label class="frequency-option">
+
+                            <input
+                                type="radio"
+                                name="target_frequency"
+                                value="1"
+                                required
+                            >
+
+                            <span class="frequency-card">
+
+                                <strong>
+                                    Every day
+                                </strong>
+
+                                <small>
+                                    Daily
+                                </small>
+
+                            </span>
+
+                        </label>
+
+
+                        <label class="frequency-option">
+
+                            <input
+                                type="radio"
+                                name="target_frequency"
+                                value="3"
+                            >
+
+                            <span class="frequency-card">
+
+                                <strong>
+                                    Every 3 days
+                                </strong>
+
+                                <small>
+                                    Frequent
+                                </small>
+
+                            </span>
+
+                        </label>
+
+
+                        <label class="frequency-option">
+
+                            <input
+                                type="radio"
+                                name="target_frequency"
+                                value="7"
+                            >
+
+                            <span class="frequency-card">
+
+                                <strong>
+                                    Once a week
+                                </strong>
+
+                                <small>
+                                    Weekly
+                                </small>
+
+                            </span>
+
+                        </label>
+
+
+                        <label class="frequency-option">
+
+                            <input
+                                type="radio"
+                                name="target_frequency"
+                                value="14"
+                            >
+
+                            <span class="frequency-card">
+
+                                <strong>
+                                    Every 2 weeks
+                                </strong>
+
+                                <small>
+                                    Biweekly
+                                </small>
+
+                            </span>
+
+                        </label>
+
+
+                        <label class="frequency-option">
+
+                            <input
+                                type="radio"
+                                name="target_frequency"
+                                value="30"
+                            >
+
+                            <span class="frequency-card">
+
+                                <strong>
+                                    Once a month
+                                </strong>
+
+                                <small>
+                                    Monthly
+                                </small>
+
+                            </span>
+
+                        </label>
+
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Current Level
+                    </label>
+
+                    <div class="level-options">
+
+
+                        <label class="level-option">
+
+                            <input
+                                type="radio"
+                                name="initial_level"
+                                value="Beginner"
+                                required
+                            >
+
+                            <span class="level-card">
+
+                                <span class="level-visual">
+                                    ▂
+                                </span>
+
+                                <span>
+                                    <strong>
+                                        Beginner
+                                    </strong>
+
+                                    <small>
+                                        Starting out
+                                    </small>
+                                </span>
+
+                            </span>
+
+                        </label>
+
+
+                        <label class="level-option">
+
+                            <input
+                                type="radio"
+                                name="initial_level"
+                                value="Intermediate"
+                            >
+
+                            <span class="level-card">
+
+                                <span class="level-visual">
+                                    ▂▅
+                                </span>
+
+                                <span>
+                                    <strong>
+                                        Intermediate
+                                    </strong>
+
+                                    <small>
+                                        Comfortable with basics
+                                    </small>
+                                </span>
+
+                            </span>
+
+                        </label>
+
+
+                        <label class="level-option">
+
+                            <input
+                                type="radio"
+                                name="initial_level"
+                                value="Advanced"
+                            >
+
+                            <span class="level-card">
+
+                                <span class="level-visual">
+                                    ▂▅█
+                                </span>
+
+                                <span>
+                                    <strong>
+                                        Advanced
+                                    </strong>
+
+                                    <small>
+                                        Strong knowledge
+                                    </small>
+
+                                </span>
+
+                            </span>
+
+                        </label>
+
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="notes">
+                        Notes
+                        <span class="optional">
+                            (Optional)
+                        </span>
+                    </label>
+
+                    <textarea
+                        id="notes"
+                        name="notes"
+                        rows="5"
+                        placeholder="Add any notes about this skill..."
+                    ></textarea>
+
+                </div>
+
+
+                <div class="form-actions">
+
+                    <a href="{{ url_for('skills') }}"
+                       class="btn-secondary">
+
+                        Cancel
+
+                    </a>
+
+                    <button
+                        type="submit"
+                        class="btn-primary">
+
+                        ➕ Add Skill
+
+                    </button>
+
+                </div>
+
+
+            </form>
+
+        </section>
+
+    </main>
+
+
+    <footer class="dashboard-footer">
+
+        <p>
+            © 2026 Skill Decay Tracker.
+            Track. Practice. Improve. 🚀
+        </p>
+
+    </footer>
+
+
+</body>
+
+</html>

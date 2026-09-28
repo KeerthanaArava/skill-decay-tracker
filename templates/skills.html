@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>My Skills | Skill Decay Tracker</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+
+<body class="skills-page">
+
+
+    <nav class="navbar">
+
+        <a href="{{ url_for('dashboard') }}"
+           class="brand">
+
+            <span class="brand-icon">
+                🧠
+            </span>
+
+            <span class="brand-text">
+                Skill Decay Tracker
+            </span>
+
+        </a>
+
+
+        <div class="nav-links">
+
+            <a href="{{ url_for('dashboard') }}"
+               class="nav-link">
+                🏠 Dashboard
+            </a>
+
+            <a href="{{ url_for('skills') }}"
+               class="nav-link active">
+                💡 My Skills
+            </a>
+
+            <a href="{{ url_for('history') }}"
+               class="nav-link">
+                📜 History
+            </a>
+
+            <a href="{{ url_for('recommendations') }}"
+               class="nav-link">
+                ✨ Recommendations
+            </a>
+
+            <a href="{{ url_for('add_skill') }}"
+               class="nav-link">
+                ➕ Add Skill
+            </a>
+
+            <a href="{{ url_for('logout') }}"
+               class="nav-link logout-link">
+                Logout
+            </a>
+
+        </div>
+
+    </nav>
+
+
+    <main class="skills-container">
+
+
+        <section class="page-header">
+
+            <div>
+
+                <p class="dashboard-label">
+                    SKILL MANAGEMENT
+                </p>
+
+                <h1>
+                    My Skills
+                </h1>
+
+                <p>
+                    Manage the skills you are currently tracking.
+                </p>
+
+            </div>
+
+
+            <a href="{{ url_for('add_skill') }}"
+               class="btn-primary">
+
+                + Add New Skill
+
+            </a>
+
+        </section>
+
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+
+            {% if messages %}
+
+                <div class="flash-container">
+
+                    {% for category, message in messages %}
+
+                        <div class="flash-message {{ category }}">
+                            {{ message }}
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+            {% endif %}
+
+        {% endwith %}
+
+
+        {% if skills %}
+
+
+            <section class="skills-grid">
+
+
+                {% for skill in skills %}
+
+
+                    <article class="managed-skill-card">
+
+
+                        <div class="managed-skill-header">
+
+                            <div class="skill-icon">
+                                💡
+                            </div>
+
+                            <span class="level-badge">
+                                {{ skill.initial_level }}
+                            </span>
+
+                        </div>
+
+
+                        <h2>
+                            {{ skill.skill_name }}
+                        </h2>
+
+
+                        <p class="skill-category">
+                            📂 {{ skill.category }}
+                        </p>
+
+
+                        {% if skill.notes %}
+
+                            <p class="skill-notes">
+                                {{ skill.notes }}
+                            </p>
+
+                        {% endif %}
+
+
+                        <div class="skill-info-row">
+
+                            <span>
+                                📅 Practice
+                            </span>
+
+                            <strong>
+                                Every {{ skill.target_frequency }} days
+                            </strong>
+
+                        </div>
+
+
+                        <div class="skill-info-row">
+
+                            <span>
+                                🗓 Added
+                            </span>
+
+                            <strong>
+                                {{ skill.created_at.strftime('%d %b %Y') }}
+                            </strong>
+
+                        </div>
+
+
+                        <div class="skill-card-actions">
+
+                            <a
+                                href="{{ url_for('practice', skill_id=skill.id) }}"
+                                class="btn-secondary"
+                            >
+                                📝 Practice
+                            </a>
+
+
+                            <form
+                                method="POST"
+                                action="{{ url_for('delete_skill', skill_id=skill.id) }}"
+                                onsubmit="return confirm('Are you sure you want to delete this skill?');"
+                            >
+
+                                <button
+                                    type="submit"
+                                    class="delete-button"
+                                >
+                                    🗑 Delete
+                                </button>
+
+                            </form>
+
+                        </div>
+
+
+                    </article>
+
+
+                {% endfor %}
+
+
+            </section>
+
+
+        {% else %}
+
+
+            <div class="empty-state">
+
+                <div class="empty-icon">
+                    💡
+                </div>
+
+                <h2>
+                    No Skills Yet
+                </h2>
+
+                <p>
+                    Add your first skill to start tracking
+                    your learning progress.
+                </p>
+
+                <a href="{{ url_for('add_skill') }}"
+                   class="btn-primary">
+
+                    + Add Your First Skill
+
+                </a>
+
+            </div>
+
+
+        {% endif %}
+
+
+    </main>
+
+
+    <footer class="dashboard-footer">
+
+        <p>
+            © 2026 Skill Decay Tracker.
+            Track. Practice. Improve. 🚀
+        </p>
+
+    </footer>
+
+
+</body>
+
+</html>

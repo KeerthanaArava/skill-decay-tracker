@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>History | Skill Decay Tracker</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+
+<body>
+
+    <!-- =====================================================
+         NAVBAR
+         ===================================================== -->
+
+    <nav class="navbar">
+
+        <a href="{{ url_for('dashboard') }}"
+           class="brand">
+
+            <span class="brand-icon">🧠</span>
+
+            <span class="brand-text">
+                Skill Decay Tracker
+            </span>
+
+        </a>
+
+
+        <div class="nav-links">
+
+            <a href="{{ url_for('dashboard') }}"
+               class="nav-link">
+
+                🏠 Dashboard
+
+            </a>
+
+
+            <a href="{{ url_for('skills') }}"
+               class="nav-link">
+
+                💡 My Skills
+
+            </a>
+
+
+            <a href="{{ url_for('history') }}"
+               class="nav-link active">
+
+                📜 History
+
+            </a>
+
+
+            <a href="{{ url_for('add_skill') }}"
+               class="nav-link">
+
+                ➕ Add Skill
+
+            </a>
+
+
+            <a href="{{ url_for('logout') }}"
+               class="nav-link logout-link">
+
+                Logout
+
+            </a>
+
+        </div>
+
+    </nav>
+
+
+    <!-- =====================================================
+         MAIN CONTENT
+         ===================================================== -->
+
+    <main class="history-container">
+
+
+        <!-- =================================================
+             PAGE HEADER
+             ================================================= -->
+
+        <section class="history-header">
+
+            <div class="history-header-content">
+
+                <span class="dashboard-label">
+                    PRACTICE HISTORY
+                </span>
+
+                <h1>
+                    Your Practice History
+                </h1>
+
+                <p>
+                    Review your previous practice sessions
+                    and learning activity.
+                </p>
+
+            </div>
+
+
+            <div class="history-header-action">
+
+                <a href="{{ url_for('skills') }}"
+                   class="btn-primary">
+
+                    📝 Practice a Skill
+
+                </a>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             FLASH MESSAGES
+             ================================================= -->
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+
+            {% if messages %}
+
+                <div class="flash-container">
+
+                    {% for category, message in messages %}
+
+                        <div class="flash-message {{ category }}">
+                            {{ message }}
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+            {% endif %}
+
+        {% endwith %}
+
+
+        <!-- =================================================
+             SUMMARY CARDS
+             ================================================= -->
+
+        <section class="history-summary">
+
+
+            <!-- TOTAL SESSIONS -->
+
+            <div class="history-stat-card">
+
+                <div class="history-stat-icon">
+                    📝
+                </div>
+
+                <div class="history-stat-content">
+
+                    <span>
+                        Total Sessions
+                    </span>
+
+                    <strong>
+                        {{ total_sessions|default(0) }}
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- PRACTICE TIME -->
+
+            <div class="history-stat-card">
+
+                <div class="history-stat-icon">
+                    ⏱️
+                </div>
+
+                <div class="history-stat-content">
+
+                    <span>
+                        Practice Time
+                    </span>
+
+                    <strong>
+                        {{ total_minutes|default(0) }}
+                        <small>min</small>
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- AVERAGE PERFORMANCE -->
+
+            <div class="history-stat-card">
+
+                <div class="history-stat-icon">
+                    📊
+                </div>
+
+                <div class="history-stat-content">
+
+                    <span>
+                        Average Performance
+                    </span>
+
+                    <strong>
+                        {{ average_performance|default(0) }}%
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             ACTIVITY SECTION
+             ================================================= -->
+
+        <section class="history-section">
+
+            <div class="section-heading">
+
+                <div>
+
+                    <span class="dashboard-label">
+                        ACTIVITY
+                    </span>
+
+                    <h2>
+                        Practice Sessions
+                    </h2>
+
+                    <p>
+                        Your recorded learning and
+                        practice activity.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 HISTORY LIST
+                 ================================================= -->
+
+            {% if practice_history %}
+
+                <div class="history-list">
+
+                    {% for item in practice_history %}
+
+                        <article class="history-item">
+
+
+                            <!-- =================================
+                                 DATE
+                                 ================================= -->
+
+                            <div class="history-date">
+
+                                <div class="history-date-icon">
+                                    📅
+                                </div>
+
+                                <div class="history-date-text">
+
+                                    <span>
+                                        Practice Date
+                                    </span>
+
+                                    <strong>
+                                        {{ item.practice_date|default("N/A") }}
+                                    </strong>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- =================================
+                                 SKILL INFORMATION
+                                 ================================= -->
+
+                            <div class="history-info">
+
+                                <div class="history-title-row">
+
+                                    <h3>
+                                        {{ item.skill_name|default("Unknown Skill") }}
+                                    </h3>
+
+
+                                    {% set difficulty =
+                                        item.difficulty|default("Medium")|lower
+                                    %}
+
+
+                                    {% if difficulty == "easy" %}
+
+                                        <span class="difficulty-badge easy">
+                                            Easy
+                                        </span>
+
+                                    {% elif difficulty == "hard" %}
+
+                                        <span class="difficulty-badge hard">
+                                            Hard
+                                        </span>
+
+                                    {% else %}
+
+                                        <span class="difficulty-badge medium">
+                                            Medium
+                                        </span>
+
+                                    {% endif %}
+
+                                </div>
+
+
+                                <!-- CATEGORY -->
+
+                                {% if item.category %}
+
+                                    <p class="history-category">
+
+                                        📂
+                                        {{ item.category }}
+
+                                    </p>
+
+                                {% endif %}
+
+
+                                <!-- DETAILS -->
+
+                                <div class="history-details">
+
+                                    <span>
+
+                                        ⏱️
+
+                                        {{ item.duration|default(0) }}
+
+                                        minutes
+
+                                    </span>
+
+
+                                    <span>
+
+                                        📊
+
+                                        {{ item.performance|default(0) }}%
+
+                                        performance
+
+                                    </span>
+
+                                </div>
+
+
+                                <!-- NOTES -->
+
+                                {% if item.notes %}
+
+                                    <div class="history-notes">
+
+                                        <span class="history-notes-icon">
+                                            📝
+                                        </span>
+
+                                        <span>
+                                            {{ item.notes }}
+                                        </span>
+
+                                    </div>
+
+                                {% endif %}
+
+                            </div>
+
+
+                            <!-- =================================
+                                 PERFORMANCE
+                                 ================================= -->
+
+                            <div class="history-performance">
+
+                                <div class="performance-header">
+
+                                    <span>
+                                        Performance
+                                    </span>
+
+                                    <strong>
+                                        {{ item.performance|default(0) }}%
+                                    </strong>
+
+                                </div>
+
+
+                                <div class="performance-bar">
+
+                                    <div
+                                        class="performance-progress"
+                                        data-performance="{{ item.performance|default(0) }}">
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </article>
+
+                    {% endfor %}
+
+                </div>
+
+
+            {% else %}
+
+                <!-- =================================================
+                     EMPTY HISTORY
+                     ================================================= -->
+
+                <div class="empty-state">
+
+                    <div class="empty-icon">
+                        📜
+                    </div>
+
+                    <h2>
+                        No Practice History Yet
+                    </h2>
+
+                    <p>
+                        Your completed practice sessions
+                        will appear here.
+                    </p>
+
+                    <a href="{{ url_for('skills') }}"
+                       class="btn-primary">
+
+                        📝 Start Practicing
+
+                    </a>
+
+                </div>
+
+            {% endif %}
+
+        </section>
+
+    </main>
+
+
+    <!-- =====================================================
+         FOOTER
+         ===================================================== -->
+
+    <footer class="dashboard-footer">
+
+        <p>
+            © 2026 Skill Decay Tracker.
+            Track. Practice. Improve. 🚀
+        </p>
+
+    </footer>
+
+
+    <!-- =====================================================
+         PERFORMANCE BAR SCRIPT
+         ===================================================== -->
+
+    <script>
+
+        document.addEventListener("DOMContentLoaded", function () {
+
+            const progressBars =
+                document.querySelectorAll(
+                    ".performance-progress"
+                );
+
+
+            progressBars.forEach(function (bar) {
+
+                let performance =
+                    parseFloat(
+                        bar.dataset.performance
+                    );
+
+
+                if (isNaN(performance)) {
+                    performance = 0;
+                }
+
+
+                const safePerformance =
+                    Math.max(
+                        0,
+                        Math.min(
+                            100,
+                            performance
+                        )
+                    );
+
+
+                bar.style.width =
+                    safePerformance + "%";
+
+            });
+
+        });
+
+    </script>
+
+</body>
+
+</html>
